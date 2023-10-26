@@ -1,0 +1,116 @@
+print(" \tCONVERSOR DE UNIDADES \n")
+print("""    2 - Binario
+    8 - Octal
+    10 - decimal
+    16 - Hexadecimal""")
+base = input("Elige una base numérica desde la que quieras convertir: ")
+while not base.isnumeric() or int(base) not in {2, 8, 10, 16}:
+    base = input("Elige una base numérica desde la que quieras convertir: ")
+basefinal = input("Elige una base numérica para tu resultado: ")
+while not basefinal.isnumeric() or int(basefinal) not in {2, 8, 10, 16}:
+    basefinal = input("Elige una base numérica para tu resultado: ")
+
+def pedirnum():
+    numincorrecto = True
+    contadorerror = 1
+    while numincorrecto == True:
+        contadorerror = 0
+        global number
+        number = input("Introduce un número para convertir: ")
+        if int(base) != 16:
+            while not number.isnumeric():
+                number = input("Introduce un número para convertir: ")
+            if int(base) == 2:
+                for i in range(0, len(str(number))):
+                    if str(number)[i] not in {'0', '1'}:
+                        contadorerror += 1
+            if int(base) == 8:
+                for i in range(0, len(str(number))):
+                    if str(number)[i] not in {'0', '1', '2', '3', '4', '5', '6', '7', '8'}:
+                        contadorerror += 1
+        else:
+            for i in range(0, len(str(number))):
+                if str(number)[i] not in {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'f'}:
+                    contadorerror += 1
+        if contadorerror > 0:
+            numincorrecto = True
+        else:
+            numincorrecto = False
+
+pedirnum()
+
+def invertir(texto):
+    return texto [::-1]
+
+def desde_dec(decimal):
+    while int(decimal) > 0:
+        residuo = int(decimal) % int(basefinal)
+        resultado.append(residuo)
+        decimal = int(decimal) / int(basefinal)
+
+def convertir_a_decimal(numero, listaRes):
+    if int(base) == 8 or int(base) == 2:
+        octal = int(invertir(numero))
+        #print(octal)
+        for i in range(0, len(str(octal))):
+            listaRes.append(int(str(octal)[i]) * (int(base) ** i))
+    elif int(base) == 16:
+        hexa = invertir(numero)
+        #print(hexa)
+        listahexa = []
+        for i in range(0, len(str(hexa))):
+            if (str(hexa)[i].isnumeric()):
+                listahexa.append(int(str(hexa)[i]))
+            elif str(hexa)[i] == "a":
+                listahexa.append(10)
+            elif str(hexa)[i] == "b":
+                listahexa.append(11)
+            elif str(hexa)[i] == "c":
+                listahexa.append(12)
+            elif str(hexa)[i] == "d":
+                listahexa.append(13)
+            elif str(hexa)[i] == "e":
+                listahexa.append(14)
+            elif str(hexa)[i] == "f":
+                listahexa.append(15)
+            #print(listahexa)
+            listaRes.append(int(listahexa[i]) * (int(base) ** i))
+
+repetir = True
+while repetir == True:
+    if int(base) == 10:
+        resultado = []
+        desde_dec(number)
+        resultado.reverse()
+        if int(basefinal) == 16:
+            for i in range(0, len(resultado)):
+                if resultado[i] == 10:
+                    resultado[i] = "A"
+                elif resultado[i] == 11:
+                    resultado[i] = "B"
+                elif resultado[i] == 12:
+                    resultado[i] = "C"
+                elif resultado[i] == 13:
+                    resultado[i] = "D"
+                elif resultado[i] == 14:
+                    resultado[i] = "E"
+                elif resultado[i] == 15:
+                    resultado[i] = "F"
+        print(f"El número {number} en base {basefinal} es: ", end="")
+        for i in range(0, len(resultado)):
+            print(resultado[i], end="")
+        print("")
+        repetir = False
+
+    elif int(base) != 10:
+        resultado = []
+        suma = 0
+        convertir_a_decimal(number, resultado)
+        for i in range(0, len(resultado)):
+            suma += resultado[i]
+        print(f"El número {number} en base 10 es: {suma}")
+        if int(basefinal) == 10:
+            repetir = False
+        else:
+            number = suma
+            base = 10
